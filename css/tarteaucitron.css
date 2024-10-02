@@ -1306,6 +1306,11 @@ a.tarteaucitronSelfLink {
     height: 30px;
 }
 
+#tarteaucitronRoot a.tarteaucitronSelfLink img {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .tarteaucitronMainLine .tarteaucitronH2 {
     font-size: 1.2em !important;
     margin-top: 4px !important;
