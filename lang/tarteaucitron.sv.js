@@ -10,11 +10,11 @@ tarteaucitron.lang = {
     "alertBigClick": "Om du fortsätter att surfa på denna webbplats,",
     "alertBig": "du tillåter alla tjänster från tredje part",
 
-    "alertBigPrivacy": "Denna webbplats använder cookies och ger dig kontroll över vad du vill aktivera",
+    "alertBigPrivacy": "Vi använder cookies – du bestämmer vilka som är aktiva",
     "alertSmall": "Hantera tjänster",
-    "personalize": "Personifiera",
+    "personalize": "Anpassa",
     "acceptAll": "OK, acceptera allt",
-    "close": "Stänga",
+    "close": "Stäng",
     "closeBanner": "Dölj cookies banner",
 
     "privacyUrl": "Integritetspolicy",
@@ -35,12 +35,12 @@ tarteaucitron.lang = {
     "noServices": "Denna webbplats använder ingen cookie som kräver ditt samtycke.",
 
     "toggleInfoBox": "Visa / dölj information om lagring av cookies",
-    "title": "Cookie- hanteringspanel",
+    "title": "Anpassa val för cookies",
     "cookieDetail": "cookie- detalj för",
     "ourSite": "på vår webbplats",
     "modalWindow": "(modalt fönster)",
     "newWindow": "(nytt fönster)",
-    "allowAll": "Tillåt alla cookie",
+    "allowAll": "Tillåt alla cookies",
     "denyAll": "Neka alla cookies",
 
     "icon": "Cookies",
