@@ -3,9 +3,6 @@
     fetch('/.netlify/functions/getSupabaseConfig')
         .then(response => response.json())
         .then(data => {
-            console.log(data.supabaseKey);
-            console.log(data.supabaseUrl);
-
             // Kontrollera att supabase är definierat
             if (typeof supabase === 'undefined') {
                 console.error('Supabase är inte definierad. Se till att Supabase-skriptet laddas korrekt.');
