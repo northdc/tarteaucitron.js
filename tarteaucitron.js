@@ -1283,7 +1283,7 @@ var tarteaucitron = {
             }
         },
         "respond": function (el, status) {
-            const serviceName = el.getAttribute('data-service-name');
+            const serviceName = el.id;
             logConsent(status, serviceName);
             console.log('Consent logged for service:', serviceName);
             "use strict";
