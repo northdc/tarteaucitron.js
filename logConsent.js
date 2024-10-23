@@ -1,56 +1,68 @@
 (function () {
-    // Kontrollera att supabase är definierat
-    if (typeof supabase === 'undefined') {
-        console.error('Supabase är inte definierad. Se till att Supabase-skriptet laddas korrekt.');
-        return;
-    }
 
-    // Konfigurera Supabase
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_KEY;
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+    fetch('/.netlify/functions/getSupabaseConfig')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.supabaseKey);
+            console.log(data.supabaseUrl);
 
-    // Funktion för att samla in webbläsarens metadata
-    function getBrowserMetadata() {
-        const userAgent = navigator.userAgent;
-        const platform = navigator.platform;
-        const timestamp = new Date().toISOString();
-        const rootUrl = window.location.origin; // Hämta root-URL
+            // Kontrollera att supabase är definierat
+            if (typeof supabase === 'undefined') {
+                console.error('Supabase är inte definierad. Se till att Supabase-skriptet laddas korrekt.');
+                return;
+            }
 
-        return {
-            userAgent,
-            platform,
-            timestamp,
-            rootUrl
-        };
-    }
+            // Konfigurera Supabase
+            const supabaseUrl = data.supabaseUrl;
+            const supabaseKey = data.supabaseKey;
+            const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-    // Funktion för att logga samtycke
-    async function logConsent(consentGiven, serviceName) {
-        const metadata = getBrowserMetadata();
+            // Funktion för att samla in webbläsarens metadata
+            function getBrowserMetadata() {
+                const userAgent = navigator.userAgent;
+                const platform = navigator.platform;
+                const timestamp = new Date().toISOString();
+                const rootUrl = window.location.origin; // Hämta root-URL
 
-        const consentData = {
-            user_agent: metadata.userAgent,
-            platform: metadata.platform,
-            consent_given: consentGiven,
-            timestamp: metadata.timestamp,
-            root_url: metadata.rootUrl,
-            service_name: serviceName
-        };
+                return {
+                    userAgent,
+                    platform,
+                    timestamp,
+                    rootUrl
+                };
+            }
 
-        const { data, error } = await supabaseClient
-            .from('consent') // Kontrollera att tabellnamnet är korrekt
-            .insert([consentData]);
+            // Funktion för att logga samtycke
+            async function logConsent(consentGiven, serviceName) {
+                const metadata = getBrowserMetadata();
 
-        if (error) {
-            console.error('Error logging consent:', error);
-        } else {
-            console.log('Consent logged');
-        }
-    }
+                const consentData = {
+                    user_agent: metadata.userAgent,
+                    platform: metadata.platform,
+                    consent_given: consentGiven,
+                    timestamp: metadata.timestamp,
+                    root_url: metadata.rootUrl,
+                    service_name: serviceName
+                };
 
-    // Exponera logConsent globalt
-    if (typeof window !== 'undefined') {
-        window.logConsent = logConsent;
-    }
+                const { data, error } = await supabaseClient
+                    .from('consent') // Kontrollera att tabellnamnet är korrekt
+                    .insert([consentData]);
+
+                if (error) {
+                    console.error('Error logging consent:', error);
+                } else {
+                    console.log('Consent logged');
+                }
+            }
+
+            // Exponera logConsent globalt
+            if (typeof window !== 'undefined') {
+                window.logConsent = logConsent;
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching Supabase config:', error);
+        });
+
 })();
