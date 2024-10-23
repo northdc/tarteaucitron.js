@@ -18,7 +18,7 @@
             const userAgent = navigator.userAgent;
             const platform = navigator.platform;
             const timestamp = new Date().toISOString();
-            const rootUrl = window.location.origin;
+            const rootUrl = window.location.origin; // Hämta root-URL
 
             return {
                 userAgent,
@@ -29,15 +29,16 @@
         }
 
         // Funktion för att logga samtycke
-        async function logConsent() {
+        async function logConsent(consentGiven, serviceName) {
             const metadata = getBrowserMetadata();
 
             const consentData = {
                 user_agent: metadata.userAgent,
                 platform: metadata.platform,
-                consent_given: true,
+                consent_given: consentGiven,
                 timestamp: metadata.timestamp,
-                root_url: metadata.rootUrl
+                root_url: metadata.rootUrl,
+                service_name: serviceName
             };
 
             const { data, error } = await supabase
@@ -51,21 +52,8 @@
             }
         }
 
-        // Lägg till eventlyssnare för knappen
-        document.addEventListener('DOMContentLoaded', () => {
-            const consentButton = document.getElementById('consentButton');
-            consentButton.addEventListener('click', logConsent);
-        });
-    </script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
-        const supabaseUrl = 'https://kndimsbsxsosahlgvwiu.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZGltc2JzeHNvc2FobGd2d2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg5Mjg3MDgsImV4cCI6MjA0NDUwNDcwOH0.Beh-lL1SN0saH58BB0m14UfMskzK0hlfz4mGWoX8UoA';
-        const supabase = createClient(supabaseUrl, supabaseKey);
-
-        // Resten av din kod...
+        // Exponera logConsent för att användas i andra skript
+        window.logConsent = logConsent;
     </script>
     <script src="/tarteaucitron.js"></script>
 
@@ -119,14 +107,11 @@
 
             "partnersList": false /* Show the number of partners on the popup/middle banner */
         });
-    </script> -->
+    </script>
 </head>
 
 <body>
     Hello
-    <h1>Consent Logging Test</h1>
-    <button id="consentButton">Log Consent</button>
-
     <script type="text/javascript">
         tarteaucitron.user.facebookpixelId = '1205741973961262';
         tarteaucitron.user.facebookpixelMore = function () {
@@ -151,6 +136,13 @@
         <img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=1205741973961262&ev=PageView&noscript=1" />
     </noscript>
+
+    <script type="text/javascript">
+        tarteaucitron.user.gtagUa = 'G-XXXXXXXXX';
+        // tarteaucitron.user.gtagCrossdomain = ['example.com', 'example2.com'];
+        tarteaucitron.user.gtagMore = function () { /* add here your optionnal gtag() */ };
+        (tarteaucitron.job = tarteaucitron.job || []).push('gtag');
+    </script>
 </body>
 
 </html>

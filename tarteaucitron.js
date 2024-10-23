@@ -1299,6 +1299,9 @@ var tarteaucitron = {
             }
         },
         "respond": function (el, status) {
+            const serviceName = el.id;
+            window.logConsent(status, serviceName);
+            console.log('Consent logged for service:', serviceName);
             "use strict";
             if (el.id === '') {
                 return;
@@ -1312,11 +1315,7 @@ var tarteaucitron = {
                 return;
             }
 
-            logConsent({
-                user_id: 'user123', // Byt ut detta med ett dynamiskt värde om möjligt
-                consent_given: true,
-                timestamp: new Date().toISOString()
-            });
+
 
             if (status === false && tarteaucitron.launch[key] === true) {
                 tarteaucitron.reloadThePage = true;
