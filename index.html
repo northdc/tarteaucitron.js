@@ -5,144 +5,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consent v2 demo</title>
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-
-        // Konfigurera Supabase
-        const supabaseUrl = 'https://kndimsbsxsosahlgvwiu.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZGltc2JzeHNvc2FobGd2d2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg5Mjg3MDgsImV4cCI6MjA0NDUwNDcwOH0.Beh-lL1SN0saH58BB0m14UfMskzK0hlfz4mGWoX8UoA';
-        const supabase = createClient(supabaseUrl, supabaseKey);
-
-        // Funktion för att samla in webbläsarens metadata
-        function getBrowserMetadata() {
-            const userAgent = navigator.userAgent;
-            const platform = navigator.platform;
-            const timestamp = new Date().toISOString();
-            const rootUrl = window.location.origin; // Hämta root-URL
-
-            return {
-                userAgent,
-                platform,
-                timestamp,
-                rootUrl
-            };
-        }
-
-        // Funktion för att logga samtycke
-        async function logConsent(consentGiven, serviceName) {
-            const metadata = getBrowserMetadata();
-
-            const consentData = {
-                user_agent: metadata.userAgent,
-                platform: metadata.platform,
-                consent_given: consentGiven,
-                timestamp: metadata.timestamp,
-                root_url: metadata.rootUrl,
-                service_name: serviceName
-            };
-
-            const { data, error } = await supabase
-                .from('consent') // Kontrollera att tabellnamnet är korrekt
-                .insert([consentData]);
-
-            if (error) {
-                console.error('Error logging consent:', error);
-            } else {
-                console.log('Consent logged');
-            }
-        }
-
-        // Exponera logConsent för att användas i andra skript
-        window.logConsent = logConsent;
-    </script>
-    <script src="/tarteaucitron.js"></script>
-
-    <script type="text/javascript">
-        tarteaucitron.init({
-            "privacyUrl": "", /* Privacy policy url */
-            "bodyPosition": "top", /* or top to bring it as first element for accessibility */
-
-            "cookieName": "northdc", /* Cookie name */
-
-            "orientation": "bottom", /* Banner position (top - bottom) */
-
-            "groupServices": false, /* Group services by category */
-            "showDetailsOnClick": true, /* Click to expand the description */
-            "serviceDefaultState": "wait", /* Default state (true - wait - false) */
-
-            "showAlertSmall": false, /* Show the small banner on bottom right */
-            "cookieslist": false, /* Show the cookie list */
-
-            "closePopup": false, /* Show a close X on the banner */
-
-            "showIcon": true, /* Show cookie icon to manage cookies */
-            //"iconSrc": "", /* Optionnal: URL or base64 encoded image */
-            "iconPosition": "BottomLeft", /* BottomRight, BottomLeft, TopRight and TopLeft */
-
-            "adblocker": false, /* Show a Warning if an adblocker is detected */
-
-            "DenyAllCta": true, /* Show the deny all button */
-            "AcceptAllCta": true, /* Show the accept all button when highPrivacy on */
-            "highPrivacy": true, /* HIGHLY RECOMMANDED Disable auto consent */
-            "alwaysNeedConsent": false, /* Ask the consent for "Privacy by design" services */
-
-            "handleBrowserDNTRequest": false, /* If Do Not Track == 1, disallow all */
-
-            "removeCredit": false, /* Remove credit link */
-            "moreInfoLink": true, /* Show more info link */
-
-            "useExternalCss": false, /* If false, the tarteaucitron.css file will be loaded */
-            "useExternalJs": false, /* If false, the tarteaucitron.js file will be loaded */
-
-            //"cookieDomain": ".my-multisite-domaine.fr", /* Shared cookie for multisite */
-
-            "readmoreLink": "", /* Change the default readmore link */
-
-            "mandatory": true, /* Show a message about mandatory cookies */
-            "mandatoryCta": true, /* Show the disabled accept button when mandatory on */
-
-            //"customCloserId": "", /* Optional a11y: Custom element ID used to open the panel */
-
-            "googleConsentMode": true, /* Enable Google Consent Mode v2 for Google ads and GA4 */
-
-            "partnersList": false /* Show the number of partners on the popup/middle banner */
-        });
-    </script>
 </head>
 
 <body>
     Hello
-    <script type="text/javascript">
-        tarteaucitron.user.facebookpixelId = '1205741973961262';
-        tarteaucitron.user.facebookpixelMore = function () {
-            !function (f, b, e, v, n, t, s) {
-                if (f.fbq) return; n = f.fbq = function () {
-                    n.callMethod ?
-                        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-                };
-                if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-                n.queue = []; t = b.createElement(e); t.async = !0;
-                t.src = v; s = b.getElementsByTagName(e)[0];
-                s.parentNode.insertBefore(t, s)
-            }(window, document, 'script',
-                'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '1205741973961262');
-            fbq('track', 'PageView');
-        };
-        (tarteaucitron.job = tarteaucitron.job || []).push('facebookpixel');
+
+    <!-- Ladda tarteaucitron.js först -->
+    <script src="./tarteaucitron.js"></script>
+
+    <!-- Ladda Supabase UMD-skript från CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.6/dist/umd/supabase.min.js"></script>
+
+    <!-- Ladda logConsent.js -->
+    <script src="./logConsent.js"></script>
+
+    <!-- Initiera tarteaucitron -->
+    <script>
+        // Kontrollera att tarteaucitron är definierad
+        if (typeof tarteaucitron !== 'undefined') {
+            tarteaucitron.init({
+                "privacyUrl": "", /* Privacy policy url */
+                "bodyPosition": "top", /* or top to bring it as first element for accessibility */
+
+                "cookieName": "northdc", /* Cookie name */
+
+                "orientation": "bottom", /* Banner position (top - bottom) */
+
+                "groupServices": false, /* Group services by category */
+                "showDetailsOnClick": true, /* Click to expand the description */
+                "serviceDefaultState": "wait", /* Default state (true - wait - false) */
+
+                "showAlertSmall": false, /* Show the small banner on bottom right */
+                "cookieslist": false, /* Show the cookie list */
+
+                "closePopup": false, /* Show a close X on the banner */
+
+                "showIcon": true, /* Show cookie icon to manage cookies */
+                //"iconSrc": "", /* Optionnal: URL or base64 encoded image */
+                "iconPosition": "BottomLeft", /* BottomRight, BottomLeft, TopRight and TopLeft */
+
+                "adblocker": false, /* Show a Warning if an adblocker is detected */
+
+                "DenyAllCta": true, /* Show the deny all button */
+                "AcceptAllCta": true, /* Show the accept all button when highPrivacy on */
+                "highPrivacy": true, /* HIGHLY RECOMMANDED Disable auto consent */
+                "alwaysNeedConsent": false, /* Ask the consent for "Privacy by design" services */
+
+                "handleBrowserDNTRequest": false, /* If Do Not Track == 1, disallow all */
+
+                "removeCredit": false, /* Remove credit link */
+                "moreInfoLink": true, /* Show more info link */
+
+                "useExternalCss": false, /* If false, the tarteaucitron.css file will be loaded */
+                "useExternalJs": false, /* If false, the tarteaucitron.js file will be loaded */
+
+                //"cookieDomain": ".my-multisite-domaine.fr", /* Shared cookie for multisite */
+
+                "readmoreLink": "", /* Change the default readmore link */
+
+                "mandatory": true, /* Show a message about mandatory cookies */
+                "mandatoryCta": true, /* Show the disabled accept button when mandatory on */
+
+                //"customCloserId": "", /* Optional a11y: Custom element ID used to open the panel */
+
+                "googleConsentMode": true, /* Enable Google Consent Mode v2 for Google ads and GA4 */
+
+                "partnersList": false /* Show the number of partners on the popup/middle banner */
+            });
+        } else {
+            console.error('tarteaucitron är inte definierad');
+        }
     </script>
 
-    <noscript>
-        <img height="1" width="1" style="display:none"
-            src="https://www.facebook.com/tr?id=1205741973961262&ev=PageView&noscript=1" />
-    </noscript>
+    <body>
+        Hello
+        <script type="text/javascript">
+            tarteaucitron.user.facebookpixelId = '1205741973961262';
+            tarteaucitron.user.facebookpixelMore = function () {
+                !function (f, b, e, v, n, t, s) {
+                    if (f.fbq) return; n = f.fbq = function () {
+                        n.callMethod ?
+                            n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                    };
+                    if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+                    n.queue = []; t = b.createElement(e); t.async = !0;
+                    t.src = v; s = b.getElementsByTagName(e)[0];
+                    s.parentNode.insertBefore(t, s)
+                }(window, document, 'script',
+                    'https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init', '1205741973961262');
+                fbq('track', 'PageView');
+            };
+            (tarteaucitron.job = tarteaucitron.job || []).push('facebookpixel');
+        </script>
 
-    <script type="text/javascript">
-        tarteaucitron.user.gtagUa = 'G-XXXXXXXXX';
-        // tarteaucitron.user.gtagCrossdomain = ['example.com', 'example2.com'];
-        tarteaucitron.user.gtagMore = function () { /* add here your optionnal gtag() */ };
-        (tarteaucitron.job = tarteaucitron.job || []).push('gtag');
-    </script>
-</body>
+        <noscript>
+            <img height="1" width="1" style="display:none"
+                src="https://www.facebook.com/tr?id=1205741973961262&ev=PageView&noscript=1" />
+        </noscript>
+        <script type="text/javascript">
+            tarteaucitron.user.gtagUa = 'G-XXXXXXXXX';
+            // tarteaucitron.user.gtagCrossdomain = ['example.com', 'example2.com'];
+            tarteaucitron.user.gtagMore = function () { /* add here your optionnal gtag() */ };
+            (tarteaucitron.job = tarteaucitron.job || []).push('gtag');
+        </script>
+    </body>
 
 </html>

@@ -1,22 +1,6 @@
 /*jslint browser: true, evil: true */
 /* min ready */
 
-async function logConsent(consentData) {
-    const { data, error } = await supabase
-        .from('consents') // Kontrollera att tabellnamnet är korrekt
-        .insert([{
-            user_id: consentData.userId, // Kontrollera att kolumnnamnen är korrekta
-            consent_given: consentData.consentGiven,
-            timestamp: consentData.timestamp
-        }]);
-
-    if (error) {
-        console.error('Error logging consent:', error);
-    } else {
-        console.log('Consent logged:', data);
-    }
-}
-
 var scripts = document.getElementsByTagName('script'),
     tarteaucitronPath = (document.currentScript || scripts[scripts.length - 1]).src.split('?')[0],
     tarteaucitronForceCDN = (tarteaucitronForceCDN === undefined) ? '' : tarteaucitronForceCDN,
@@ -1299,8 +1283,8 @@ var tarteaucitron = {
             }
         },
         "respond": function (el, status) {
-            const serviceName = el.id;
-            window.logConsent(status, serviceName);
+            const serviceName = el.getAttribute('data-service-name');
+            logConsent(status, serviceName);
             console.log('Consent logged for service:', serviceName);
             "use strict";
             if (el.id === '') {
@@ -2398,3 +2382,7 @@ var tarteaucitron = {
         }
     }
 };
+
+if (typeof window !== 'undefined') {
+    window.tarteaucitron = tarteaucitron;
+}
