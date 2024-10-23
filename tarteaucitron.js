@@ -1,6 +1,22 @@
 /*jslint browser: true, evil: true */
 /* min ready */
 
+async function logConsent(consentData) {
+    const { data, error } = await supabase
+        .from('consents') // Kontrollera att tabellnamnet är korrekt
+        .insert([{
+            user_id: consentData.userId, // Kontrollera att kolumnnamnen är korrekta
+            consent_given: consentData.consentGiven,
+            timestamp: consentData.timestamp
+        }]);
+
+    if (error) {
+        console.error('Error logging consent:', error);
+    } else {
+        console.log('Consent logged:', data);
+    }
+}
+
 var scripts = document.getElementsByTagName('script'),
     tarteaucitronPath = (document.currentScript || scripts[scripts.length - 1]).src.split('?')[0],
     tarteaucitronForceCDN = (tarteaucitronForceCDN === undefined) ? '' : tarteaucitronForceCDN,
@@ -16,8 +32,6 @@ var scripts = document.getElementsByTagName('script'),
     tarteaucitronProLoadServices,
     tarteaucitronNoAdBlocker = false,
     tarteaucitronIsLoaded = false;
-
-
 
 var tarteaucitron = {
     "version": 1.19,
@@ -1297,6 +1311,12 @@ var tarteaucitron = {
             if (tarteaucitron.state[key] === status) {
                 return;
             }
+
+            logConsent({
+                user_id: 'user123', // Byt ut detta med ett dynamiskt värde om möjligt
+                consent_given: true,
+                timestamp: new Date().toISOString()
+            });
 
             if (status === false && tarteaucitron.launch[key] === true) {
                 tarteaucitron.reloadThePage = true;

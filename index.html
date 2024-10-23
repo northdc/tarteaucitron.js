@@ -5,6 +5,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consent v2 demo</title>
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        // Konfigurera Supabase
+        const supabaseUrl = 'https://kndimsbsxsosahlgvwiu.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZGltc2JzeHNvc2FobGd2d2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg5Mjg3MDgsImV4cCI6MjA0NDUwNDcwOH0.Beh-lL1SN0saH58BB0m14UfMskzK0hlfz4mGWoX8UoA';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        // Funktion för att samla in webbläsarens metadata
+        function getBrowserMetadata() {
+            const userAgent = navigator.userAgent;
+            const platform = navigator.platform;
+            const timestamp = new Date().toISOString();
+            const rootUrl = window.location.origin;
+
+            return {
+                userAgent,
+                platform,
+                timestamp,
+                rootUrl
+            };
+        }
+
+        // Funktion för att logga samtycke
+        async function logConsent() {
+            const metadata = getBrowserMetadata();
+
+            const consentData = {
+                user_agent: metadata.userAgent,
+                platform: metadata.platform,
+                consent_given: true,
+                timestamp: metadata.timestamp,
+                root_url: metadata.rootUrl
+            };
+
+            const { data, error } = await supabase
+                .from('consent') // Kontrollera att tabellnamnet är korrekt
+                .insert([consentData]);
+
+            if (error) {
+                console.error('Error logging consent:', error);
+            } else {
+                console.log('Consent logged');
+            }
+        }
+
+        // Lägg till eventlyssnare för knappen
+        document.addEventListener('DOMContentLoaded', () => {
+            const consentButton = document.getElementById('consentButton');
+            consentButton.addEventListener('click', logConsent);
+        });
+    </script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+        const supabaseUrl = 'https://kndimsbsxsosahlgvwiu.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtuZGltc2JzeHNvc2FobGd2d2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg5Mjg3MDgsImV4cCI6MjA0NDUwNDcwOH0.Beh-lL1SN0saH58BB0m14UfMskzK0hlfz4mGWoX8UoA';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        // Resten av din kod...
+    </script>
     <script src="/tarteaucitron.js"></script>
 
     <script type="text/javascript">
@@ -57,11 +119,13 @@
 
             "partnersList": false /* Show the number of partners on the popup/middle banner */
         });
-    </script>
+    </script> -->
 </head>
 
 <body>
     Hello
+    <h1>Consent Logging Test</h1>
+    <button id="consentButton">Log Consent</button>
 
     <script type="text/javascript">
         tarteaucitron.user.facebookpixelId = '1205741973961262';
