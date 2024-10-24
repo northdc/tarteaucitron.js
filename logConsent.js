@@ -1,6 +1,6 @@
 (function () {
 
-    fetch('/.netlify/functions/getSupabaseConfig')
+    fetch('https://northdcconsent.netlify.app/.netlify/functions/getSupabaseConfig')
         .then(response => response.json())
         .then(data => {
             // Kontrollera att supabase är definierat
